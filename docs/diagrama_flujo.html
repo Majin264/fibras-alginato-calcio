@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama de Flujo — Fibras de Alginato de Calcio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #f7f4ef;
+  --ink: #1a1a18;
+  --ink-soft: #5a5a52;
+  --ink-muted: #9a9a8e;
+  --rule: #d8d4cc;
+
+  --c1: #2d6a4f;
+  --c1-bg: #eaf4ee;
+  --c2: #5c4a8a;
+  --c2-bg: #f0edf8;
+  --c3: #c46b1a;
+  --c3-bg: #fdf2e6;
+  --c4: #1a5a8a;
+  --c4-bg: #e8f2fa;
+  --c5: #8a3030;
+  --c5-bg: #faeaea;
+  --cr: #3a3a3a;
+  --cr-bg: #f0ede8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 300;
+  padding: 40px 20px 80px;
+}
+
+.page-header {
+  max-width: 860px;
+  margin: 0 auto 40px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 18px;
+}
+
+.page-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+
+.page-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(20px, 3.5vw, 30px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-title em { font-style: italic; color: var(--c1); }
+
+/* ── REFERENCIAS ── */
+.ref-section {
+  max-width: 860px;
+  margin: 0 auto 48px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ref-header {
+  background: var(--cr-bg);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cr);
+  font-weight: 500;
+}
+
+.ref-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ref-item:last-child { border-bottom: none; }
+
+.ref-num {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 0 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  border-right: 1px solid var(--rule);
+}
+
+.ref-content {
+  padding: 14px 18px;
+}
+
+.ref-cite {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 5px;
+  line-height: 1.45;
+}
+
+.ref-aporte {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.ref-aporte strong { color: var(--ink); font-weight: 500; }
+
+/* ── FLOW ── */
+.flow {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.v-line {
+  width: 2px;
+  height: 36px;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+
+/* ── BLOCK ── */
+.block { width: 100%; }
+
+.block-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 8px;
+  padding: 11px 28px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.block-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.block-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.block-inner {
+  width: 100%;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── CARD ── */
+.full-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 15px 18px;
+  width: 100%;
+  border-left: 3px solid var(--block-color);
+  position: relative;
+}
+
+.card-ref {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  background: var(--bg);
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 1px solid var(--rule);
+}
+
+.q-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--block-color);
+  margin-bottom: 5px;
+  opacity: 0.85;
+}
+
+.q-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  padding-right: 60px;
+}
+
+.q-body {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.q-body strong { color: var(--ink); font-weight: 500; }
+
+/* ── BRANCH ── */
+.branch-row {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.cols-2 { grid-template-columns: 1fr 1fr; }
+.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.branch-card {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 12px 14px;
+  border-top: 2px solid var(--block-color);
+}
+
+.bc-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--block-color);
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+
+.bc-title {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 5px;
+  line-height: 1.35;
+}
+
+.bc-text {
+  font-size: 11px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.bc-text strong { color: var(--ink); font-weight: 500; }
+
+/* ── NOTE ── */
+.note {
+  background: var(--bg);
+  border-left: 3px solid var(--block-color);
+  border-radius: 0 6px 6px 0;
+  padding: 9px 13px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.note strong { color: var(--ink); font-weight: 500; }
+
+/* ── TABLE ── */
+.mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 11px;
+}
+.mini-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--block-color);
+  padding: 5px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.mini-table td {
+  padding: 5px 8px;
+  color: var(--ink-soft);
+  border-bottom: 1px solid #f0ece4;
+  vertical-align: top;
+}
+.mini-table tr:last-child td { border-bottom: none; }
+
+/* ── COLORS ── */
+.b1 { --block-color: var(--c1); }
+.b2 { --block-color: var(--c2); }
+.b3 { --block-color: var(--c3); }
+.b4 { --block-color: var(--c4); }
+.b5 { --block-color: var(--c5); }
+
+.bh1 { background: var(--c1-bg); color: var(--c1); }
+.bh2 { background: var(--c2-bg); color: var(--c2); }
+.bh3 { background: var(--c3-bg); color: var(--c3); }
+.bh4 { background: var(--c4-bg); color: var(--c4); }
+.bh5 { background: var(--c5-bg); color: var(--c5); }
+
+@media (max-width: 600px) {
+  .cols-3, .cols-2 { grid-template-columns: 1fr; }
+  body { padding: 24px 14px 60px; }
+  .q-title { padding-right: 0; }
+  .card-ref { position: static; display: inline-block; margin-bottom: 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-label">Ingeniería de Materiales · Universidad de Antioquia · 2025</div>
+  <div class="page-title">Diagrama de flujo — <em>Fibras de Alginato de Calcio</em></div>
+</div>
+
+<!-- REFERENCIAS -->
+<div class="ref-section">
+  <div class="ref-header">Referencias bibliográficas</div>
+
+  <div class="ref-item">
+    <div class="ref-num">[1]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Abourehab et al. (2022). Alginate as a Promising Biopolymer in Drug Delivery and Wound Healing. <em>International Journal of Molecular Sciences</em>, 23(16), 9035.</div>
+      <div class="ref-aporte">Establece las bases estructurales y químicas del alginato: origen, composición de bloques M y G, relación M/G, propiedades fundamentales (biocompatibilidad, biodegradabilidad, capacidad de gelificación) y aplicaciones biomédicas validadas. <strong>Punto de partida del marco teórico.</strong></div>
+    </div>
+  </div>
+
+  <div class="ref-item">
+    <div class="ref-num">[2]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Braccini & Pérez (2001). Molecular Basis of Ca²⁺-Induced Gelation in Alginates and Pectins: The Egg-Box Model Revisited. <em>Biomacromolecules</em>, 2(4), 1089–1096.</div>
+      <div class="ref-aporte">Articulo clásico que establece el modelo egg-box mediante estudios de difracción de rayos X. Explica la base molecular del mecanismo de gelificación iónica: dimerización, agregación lateral y formación de red tridimensional. Justifica la especificidad del Ca²⁺ frente a otros cationes. <strong>Referencia fundamental para comprender el mecanismo de entrecruzamiento.</strong></div>
+    </div>
+  </div>
+
+  <div class="ref-item">
+    <div class="ref-num">[3]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Cao et al. (2020). Egg-box model-based gelation of alginate and pectin: A review. <em>Carbohydrate Polymers</em>, 242, 116389.</div>
+      <div class="ref-aporte">Revisión comparativa del modelo egg-box en alginato y pectina. Introduce los factores intrínsecos y extrínsecos que modulan la densidad de la red. Describe la conformación helicoidal 3/1 en gelificaciones lentas vs. 2/1 en rápidas. <strong>Amplía y actualiza el modelo de Braccini & Pérez.</strong></div>
+    </div>
+  </div>
+
+  <div class="ref-item">
+    <div class="ref-num">[4]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Yilmaz et al. (2024). Diverse Approaches in Wet-Spun Alginate Filament Production from the Textile Industry Perspective. <em>Polymers</em>, 16(13), 1817.</div>
+      <div class="ref-aporte">Revisión exhaustiva del proceso de wet spinning de fibras de alginato desde la perspectiva de la industria textil. Describe los parámetros de proceso, sus efectos sobre las propiedades de la fibra y el rango de espinnabilidad. <strong>Referencia técnica central para el diseño experimental.</strong></div>
+    </div>
+  </div>
+
+  <div class="ref-item">
+    <div class="ref-num">[5]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Shi et al. (2021). High strength and strain alginate fibers by a novel wheel spinning technique. <em>Materials Science and Engineering C</em>.</div>
+      <div class="ref-aporte">Documenta las limitaciones mecánicas del wet spinning convencional y propone la orientación de cadenas como estrategia de mejora. Reporta resistencias de hasta 173 MPa y elongaciones de hasta 35% mediante control de tensión durante la gelificación. <strong>Establece los valores de referencia mecánica para la literatura.</strong></div>
+    </div>
+  </div>
+
+  <div class="ref-item">
+    <div class="ref-num">[6]</div>
+    <div class="ref-content">
+      <div class="ref-cite">Farshidfar et al. (2023). Alginate-Based Biomaterials in Tissue Engineering and Regenerative Medicine. <em>Marine Drugs</em>, 21(3), 189.</div>
+      <div class="ref-aporte">Revisión de las aplicaciones del alginato en ingeniería de tejidos, cicatrización de heridas, liberación de fármacos y terapia oncológica. Contextualiza las propiedades del alginato en aplicaciones biomédicas validadas clínicamente. <strong>Provee el contexto de impacto y relevancia del material.</strong></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DIAGRAMA DE FLUJO -->
+<div class="flow">
+
+<!-- ═══ BLOQUE 1 — ALGINATO ═══ -->
+<div class="block b1">
+  <div class="block-header bh1">
+    <span class="block-num">01</span>
+    <span class="block-title">Alginato</span>
+  </div>
+  <div class="block-inner">
+
+    <div class="full-card b1">
+      <span class="card-ref">Ref. [1] [6]</span>
+      <div class="q-label">Subtema 1.1 — Origen</div>
+      <div class="q-title">¿Qué es el alginato y de dónde proviene?</div>
+      <div class="q-body">El alginato es un polisacárido lineal aniónico de origen natural, presente principalmente en la pared celular de algas pardas (<em>Phaeophyceae</em>). Las principales fuentes comerciales son <em>Laminaria hyperborea</em> (elevado contenido en bloques G), <em>Laminaria japonica</em> (uso industrial predominante) y <em>Ascophyllum nodosum</em>. Determinadas especies bacterianas también lo producen, aunque en menor escala industrial. La fuente determina la composición del polímero y, en consecuencia, las propiedades del material resultante.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b1">
+      <span class="card-ref">Ref. [1] [4]</span>
+      <div class="q-label">Subtema 1.2 — Tipos</div>
+      <div class="q-title">¿Qué tipos de alginato existen y cuál se emplea en este proceso?</div>
+      <div class="q-body">El alginato se clasifica según la sal correspondiente y el peso molecular. Para la fabricación de fibras por wet spinning se emplea <strong>alginato de sodio de grado medio</strong> (viscosidad 200–500 mPa·s en solución al 1%), dado que es la única variante soluble en agua a temperatura ambiente y presenta una viscosidad manejable para extrusión manual.</div>
+      <table class="mini-table">
+        <tr><th>Tipo</th><th>Solubilidad</th><th>Aplicación</th></tr>
+        <tr><td>Alginato de sodio</td><td>Soluble en agua</td><td>Solución de extrusión (jeringa)</td></tr>
+        <tr><td>Alginato de calcio</td><td>Insoluble</td><td>Fibra formada tras gelificación</td></tr>
+        <tr><td>Alginato de potasio</td><td>Soluble en agua</td><td>Alternativa al de sodio</td></tr>
+        <tr><td>Alginato de propilénglicol (PGA)</td><td>Soluble en ácidos</td><td>Aplicaciones alimentarias</td></tr>
+      </table>
+      <div class="note">La relación M/G debe constar en la ficha técnica del proveedor. Para fibras textiles con balance entre resistencia y flexibilidad, se recomienda una <strong>relación M/G entre 1.0 y 1.5</strong>.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b1">
+      <span class="card-ref">Ref. [1] [6]</span>
+      <div class="q-label">Subtema 1.3 — Aplicaciones</div>
+      <div class="q-title">¿En qué sectores se emplea el alginato?</div>
+      <div class="q-body">Las propiedades intrínsecas del alginato (biodegradabilidad, biocompatibilidad, capacidad de gelificación y alta absorción de agua) fundamentan su uso en múltiples sectores.</div>
+      <div class="branch-row cols-3">
+        <div class="branch-card b1">
+          <div class="bc-tag">Biomédico</div>
+          <div class="bc-title">Aplicaciones validadas clínicamente</div>
+          <div class="bc-text">Apósitos para heridas y quemaduras · Encapsulación de células pancreáticas · Andamiajes para cartílago y hueso · Liberación controlada de fármacos · Bioimpresión 3D de tejidos</div>
+        </div>
+        <div class="branch-card b1">
+          <div class="bc-tag">Textil y ambiental</div>
+          <div class="bc-title">Área de investigación del presente proyecto</div>
+          <div class="bc-text">Fibras biodegradables para tejidos · Telas con alta absorción de humedad · Apósitos textiles integrados · Membranas para filtración de metales pesados en aguas residuales</div>
+        </div>
+        <div class="branch-card b1">
+          <div class="bc-tag">Alimentario y cosmético</div>
+          <div class="bc-title">Uso masivo consolidado</div>
+          <div class="bc-text">Gelificante y espesante · Encapsulación de probióticos y omega-3 · Esferificación en gastronomía molecular · Máscaras faciales · Vehículos de activos cosméticos</div>
+        </div>
+      </div>
+      <div class="note">Las fibras de alginato empleadas como apósitos biomédicos y las producidas para aplicaciones textiles son <strong>estructuralmente equivalentes</strong>. La diferencia reside en la aplicación final, no en la naturaleza del material ni en el proceso de síntesis.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="v-line"></div>
+
+<!-- ═══ BLOQUE 2 — ESTRUCTURA QUÍMICA ═══ -->
+<div class="block b2">
+  <div class="block-header bh2">
+    <span class="block-num">02</span>
+    <span class="block-title">Estructura química</span>
+  </div>
+  <div class="block-inner">
+
+    <div class="full-card b2">
+      <span class="card-ref">Ref. [1] [2]</span>
+      <div class="q-label">Subtema 2.1 — Distinción conceptual</div>
+      <div class="q-title">¿Qué diferencia existe entre un polímero y un multímero en el contexto del alginato?</div>
+      <div class="q-body">El <strong>polímero</strong> corresponde a la cadena molecular individual de alginato sódico, sintetizada por el organismo fuente. El <strong>multímero</strong> es una asociación supramolecular de varias cadenas, estabilizada por la coordinación iónica con Ca²⁺. El Ca²⁺ no genera un nuevo polímero: crea asociaciones reversibles entre cadenas preexistentes. La secuencia de organización es: <strong>polímero suelto → dímero (2 cadenas) → multímero (dímeros agregados) → red tridimensional → gel → fibra</strong>. La reversibilidad del proceso implica que el gel puede disociarse mediante agentes quelantes que capturen el Ca²⁺.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b2">
+      <span class="card-ref">Ref. [1]</span>
+      <div class="q-label">Subtema 2.2 — Composición</div>
+      <div class="q-title">¿Cuál es la estructura química de la cadena de alginato?</div>
+      <div class="q-body">La cadena de alginato está compuesta exclusivamente por dos tipos de monómero que se organizan en bloques de secuencias MM, GG o MG. La proporción relativa de cada bloque (relación M/G) determina las propiedades mecánicas e hídricas del material resultante.</div>
+      <div class="branch-row cols-2">
+        <div class="branch-card b2">
+          <div class="bc-tag">Bloque M — ácido β-D-manurónico</div>
+          <div class="bc-title">Configuración ecuatorial · Cadena extendida</div>
+          <div class="bc-text">Produce geles blandos y elásticos. Alta capacidad de absorción de agua. <strong>No participa en la red egg-box con Ca²⁺ de forma ordenada.</strong> Constituye los lazos flexibles de la red tridimensional.</div>
+        </div>
+        <div class="branch-card b2">
+          <div class="bc-tag">Bloque G — ácido α-L-gulurónico</div>
+          <div class="bc-title">Configuración axial · Cadena doblada</div>
+          <div class="bc-text">Produce geles duros y frágiles. Geometría específica para coordinar Ca²⁺. <strong>Participa directamente en la red egg-box.</strong> Constituye los nodos rígidos de la red tridimensional.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b2">
+      <span class="card-ref">Ref. [2] [3]</span>
+      <div class="q-label">Subtema 2.3 — Mecanismo de gelificación</div>
+      <div class="q-title">¿Cómo transforma el Ca²⁺ las cadenas sueltas en una red sólida?</div>
+      <div class="q-body">Los bloques GG presentan una geometría que genera cavidades moleculares capaces de atrapar iones Ca²⁺ entre dos cadenas antiparalelas. Este mecanismo, denominado <strong>modelo egg-box</strong>, opera en tres etapas secuenciales.</div>
+      <div class="branch-row cols-3">
+        <div class="branch-card b2">
+          <div class="bc-tag">Etapa 1 — Dimerización</div>
+          <div class="bc-title">Asociaciones fuertes</div>
+          <div class="bc-text">Dos cadenas se alinean antiparalelamente. Los bloques GG generan cavidades que coordinan iones Ca²⁺. Los bloques MM permanecen excluidos de esta unión.</div>
+        </div>
+        <div class="branch-card b2">
+          <div class="bc-tag">Etapa 2 — Agregación lateral</div>
+          <div class="bc-title">Asociaciones débiles inter-dímero</div>
+          <div class="bc-text">Varios dímeros se empaquetan lateralmente formando multímeros de mayor cohesión. La red comienza a adquirir resistencia mecánica macroscópica.</div>
+        </div>
+        <div class="branch-card b2">
+          <div class="bc-tag">Etapa 3 — Red tridimensional</div>
+          <div class="bc-title">Gel macroscópico</div>
+          <div class="bc-text">Los multímeros interconectados conforman una red continua. <strong>Nodos rígidos</strong> (G·Ca²⁺·G) + <strong>lazos flexibles</strong> (bloques MM libres) = gel macroscópico.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b2">
+      <span class="card-ref">Ref. [2] [3]</span>
+      <div class="q-label">Subtema 2.4 — Rol simultáneo de los bloques M</div>
+      <div class="q-title">¿Qué ocurre con los bloques M mientras los bloques G forman la red egg-box?</div>
+      <div class="q-body">Durante la gelificación, los bloques GG actúan como nodos de entrecruzamiento iónico (zonas rígidas), mientras que los bloques MM quedan excluidos de las uniones con Ca²⁺ y funcionan como <strong>lazos flexibles</strong> entre nodos. Esta arquitectura bimodal confiere a la fibra una capacidad de deformación antes de la fractura. Adicionalmente, los bloques MM, al no estar coordinados con Ca²⁺, mantienen disponibles sus grupos carboxilato para interactuar con moléculas de agua, lo que incrementa la absorción hídrica de la fibra.</div>
+      <div class="note">Al aumentar la concentración de CaCl₂, se activan más sitios GG como nodos de entrecruzamiento, incrementando la rigidez de la red. Los bloques MM no desaparecen, pero su influencia relativa sobre las propiedades finales disminuye proporcionalmente.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b2">
+      <span class="card-ref">Ref. [2]</span>
+      <div class="q-label">Subtema 2.5 — Especificidad iónica</div>
+      <div class="q-title">¿Por qué el Ca²⁺ produce gelificación y el Na⁺ no?</div>
+      <div class="q-body">El Na⁺ posee una sola carga positiva y un radio iónico insuficiente para coordinarse simultáneamente con los grupos carboxilato de dos cadenas de bloques G antiparalelas. El Ca²⁺, con dos cargas positivas y un radio iónico apropiado, encaja geométricamente en la cavidad formada por dos bloques GG enfrentados, generando una unión coordinada estable. Esta especificidad geométrica es la base molecular del modelo egg-box. Otros cationes divalentes como Ba²⁺ y Sr²⁺ también inducen gelificación, aunque con propiedades y cinéticas distintas.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="v-line"></div>
+
+<!-- ═══ BLOQUE 3 — PROCESAMIENTO ═══ -->
+<div class="block b3">
+  <div class="block-header bh3">
+    <span class="block-num">03</span>
+    <span class="block-title">Procesamiento</span>
+  </div>
+  <div class="block-inner">
+
+    <div class="full-card b3">
+      <span class="card-ref">Ref. [4]</span>
+      <div class="q-label">Subtema 3.1 — Wet spinning</div>
+      <div class="q-title">¿Cómo se fabrican las fibras de alginato por extrusión húmeda?</div>
+      <div class="q-body">El wet spinning consiste en extruir una solución de alginato sódico a través de una aguja hacia un baño de coagulación con CaCl₂, donde el polímero gelifica por contacto iónico. Las fibras coaguladas se extraen, lavan y secan. La gelificación no es simultánea en toda la sección transversal de la fibra: el Ca²⁺ difunde desde la superficie exterior hacia el núcleo central, de modo que el tiempo de inmersión determina la homogeneidad interna de la red.</div>
+      <div class="branch-row cols-3">
+        <div class="branch-card b3">
+          <div class="bc-tag">Solución A — Jeringa</div>
+          <div class="bc-title">Alginato sódico 2% p/v</div>
+          <div class="bc-text">2 g de alginato sódico en 100 mL de agua destilada. Preparación con 4–12 h de anticipación. Agitación lenta para evitar burbujas. La solución debe ser transparente, viscosa y homogénea.</div>
+        </div>
+        <div class="branch-card b3">
+          <div class="bc-tag">Solución B — Baño de coagulación</div>
+          <div class="bc-title">CaCl₂ 5% p/v</div>
+          <div class="bc-text">5 g de CaCl₂ en 100 mL de agua destilada. Preparación fresca por sesión. pH 6–7 verificado con pH-metro. Profundidad mínima de 10 cm.</div>
+        </div>
+        <div class="branch-card b3">
+          <div class="bc-tag">Post-proceso</div>
+          <div class="bc-title">Extracción, lavado y secado</div>
+          <div class="bc-text">Extracción con pinzas. Lavado con agua destilada para eliminar CaCl₂ superficial. Secado al aire o a 37°C. Se registra la contracción longitudinal como dato experimental.</div>
+        </div>
+      </div>
+      <div class="note"><strong>Difusión del Ca²⁺:</strong> tiempo de inmersión corto → gelificación superficial, núcleo débil. Tiempo de inmersión largo → mayor penetración del Ca²⁺ → fibra más homogénea pero más rígida y menos elástica. Este fenómeno explica por qué el tiempo es una variable independiente de primer orden en el diseño experimental.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="v-line"></div>
+
+<!-- ═══ BLOQUE 4 — FACTORES ═══ -->
+<div class="block b4">
+  <div class="block-header bh4">
+    <span class="block-num">04</span>
+    <span class="block-title">Factores</span>
+  </div>
+  <div class="block-inner">
+
+    <div class="full-card b4">
+      <span class="card-ref">Ref. [2] [3]</span>
+      <div class="q-label">Subtema 4.1 — Modificadores de la red</div>
+      <div class="q-title">¿Qué factores determinan la densidad y calidad de la red egg-box?</div>
+      <div class="branch-row cols-2">
+        <div class="branch-card b4">
+          <div class="bc-tag">Factores intrínsecos — del polímero</div>
+          <div class="bc-title">Relación M/G · Peso molecular · Grupos acetilo</div>
+          <div class="bc-text">Mayor proporción G → más sitios de coordinación Ca²⁺ → red más densa. Mayor peso molecular → cadenas más largas → más zonas de unión disponibles. Los grupos acetilo bloquean sitios de unión → reducen el grado de gelificación.</div>
+        </div>
+        <div class="branch-card b4">
+          <div class="bc-tag">Factores extrínsecos — del proceso</div>
+          <div class="bc-title">Concentración Ca²⁺ · Temperatura · pH</div>
+          <div class="bc-text">Mayor [Ca²⁺] → más dímeros formados, hasta saturación de sitios disponibles. Mayor temperatura → gelificación más rápida pero red menos ordenada. pH bajo → protonación de grupos carboxilato → menor disponibilidad de sitios de unión.</div>
+        </div>
+      </div>
+      <div class="note">Según Cao et al. (2020), la velocidad de gelificación determina la conformación helicoidal de la red: gelificación lenta → hélice 3/1 más ordenada y estable; gelificación rápida → hélice 2/1 de menor orden (forma metaestable). El tiempo de inmersión modula tanto la cantidad de Ca²⁺ incorporado como el grado de organización estructural de la red.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b4">
+      <span class="card-ref">Ref. [4]</span>
+      <div class="q-label">Subtema 4.2 — Parámetros de proceso</div>
+      <div class="q-title">¿Qué efecto tiene cada parámetro de proceso sobre las propiedades de la fibra?</div>
+      <table class="mini-table">
+        <tr><th>Parámetro</th><th>Variable que controla</th><th>Efecto al aumentar</th></tr>
+        <tr><td><strong>Concentración de alginato</strong></td><td>Viscosidad de la solución y densidad de cadenas disponibles</td><td>Fibra más gruesa, mayor resistencia, superficie más lisa</td></tr>
+        <tr><td><strong>Concentración de CaCl₂</strong></td><td>Velocidad y grado de entrecruzamiento</td><td>Gelificación más rápida, mayor rigidez, mayor fragilidad</td></tr>
+        <tr><td><strong>Tiempo de inmersión</strong></td><td>Profundidad de difusión del Ca²⁺ hacia el núcleo</td><td>Red más homogénea, fibra más rígida y menos elástica</td></tr>
+        <tr><td>Diámetro de aguja</td><td>Diámetro inicial de la fibra extruida</td><td>Fibra más gruesa, gelificación menos homogénea</td></tr>
+        <tr><td>Velocidad de extrusión</td><td>Uniformidad del diámetro a lo largo de la fibra</td><td>Mayor irregularidad de diámetro, incremento de defectos</td></tr>
+      </table>
+      <div class="note">El rango de espinnabilidad documentado en la literatura es <strong>1.5–3.5% p/v</strong> de alginato sódico. Concentraciones inferiores producen soluciones con viscosidad insuficiente para mantener la integridad de la fibra. Concentraciones superiores al 4% dificultan la extrusión manual por jeringa.</div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b4">
+      <span class="card-ref">Ref. [5]</span>
+      <div class="q-label">Subtema 4.3 — Propiedades mecánicas y limitaciones</div>
+      <div class="q-title">¿Cuáles son las propiedades mecánicas características de las fibras de alginato y cuáles son sus limitaciones?</div>
+      <div class="q-body">Las fibras obtenidas por wet spinning convencional presentan resistencia a la tracción de <strong>1.5–2.5 cN/dtex</strong>, valor considerado bajo para aplicaciones textiles de carga. La causa principal es el desorden conformacional de las cadenas durante la gelificación rápida. Se identifica un dilema fundamental: <strong>optimizar la resistencia reduce la elongación y viceversa</strong>. Los valores de referencia reportados por Shi et al. (2021) mediante wheel spinning son:</div>
+      <div class="branch-row cols-2">
+        <div class="branch-card b4">
+          <div class="bc-tag">Condición optimizada para resistencia</div>
+          <div class="bc-title">173 MPa · Elongación 18% · Tenacidad 16.16 MJ·m⁻³</div>
+          <div class="bc-text">Red más densa, menor elasticidad. Adecuada para aplicaciones de carga estructural.</div>
+        </div>
+        <div class="branch-card b4">
+          <div class="bc-tag">Condición optimizada para elongación</div>
+          <div class="bc-title">135 MPa · Elongación 35% · Tenacidad 37.47 MJ·m⁻³</div>
+          <div class="bc-text">Mayor flexibilidad y capacidad de absorción de energía. Adecuada para aplicaciones textiles de confort.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v-line"></div>
+
+    <div class="full-card b4">
+      <span class="card-ref">Ref. [5]</span>
+      <div class="q-label">Subtema 4.4 — Estrategias de mejora</div>
+      <div class="q-title">¿Mediante qué estrategias puede mejorarse la resistencia mecánica de las fibras de alginato?</div>
+      <div class="branch-row cols-3">
+        <div class="branch-card b4">
+          <div class="bc-tag">Ruta 1 — Optimización de parámetros</div>
+          <div class="bc-title">Control sistemático de variables de proceso</div>
+          <div class="bc-text">Variación de concentración, tiempo y geometría de aguja sin aditivos externos. Proceso limpio, reproducible y transferible. <strong>Enfoque del presente proyecto.</strong></div>
+        </div>
+        <div class="branch-card b4">
+          <div class="bc-tag">Ruta 2 — Polímeros sintéticos</div>
+          <div class="bc-title">Adición de PVA u otros de alto peso molecular</div>
+          <div class="bc-text">Incrementa la densidad de entrecruzamiento y la resistencia, pero compromete la biodegradabilidad del material.</div>
+        </div>
+        <div class="branch-card b4">
+          <div class="bc-tag">Ruta 3 — Nanocristales de celulosa</div>
+          <div class="bc-title">Refuerzo con carga nanométrica de origen natural</div>
+          <div class="bc-text">Mejora resistencia y elongación simultáneamente. Preserva la biodegradabilidad. Requiere síntesis adicional y equipamiento especializado.</div>
+        </div>
+      </div>
+      <div class="note"><strong>Orientación de cadenas:</strong> la aplicación de tensión sobre la fibra en estado semisólido (húmedo, previo al secado completo) induce la alineación de las cadenas en la dirección de extrusión. Esta reorganización estructural mejora significativamente la resistencia mecánica. Existe una ventana temporal óptima: tensión prematura produce fractura; tensión tardía encuentra una red demasiado rígida para reordenarse.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="v-line"></div>
+
+<!-- ═══ BLOQUE 5 — MATERIALES COMPARABLES ═══ -->
+<div class="block b5">
+  <div class="block-header bh5">
+    <span class="block-num">05</span>
+    <span class="block-title">Materiales comparables</span>
+  </div>
+  <div class="block-inner">
+
+    <div class="full-card b5">
+      <span class="card-ref">Ref. [1] [4] [6]</span>
+      <div class="q-label">Subtema 5.1 — Biopolímeros alternativos</div>
+      <div class="q-title">¿Existen biopolímeros comparables al alginato para la producción de fibras por wet spinning?</div>
+      <div class="q-body">Existen alternativas biopoliméricas con capacidad de formación de fibras, aunque ninguna combina simultáneamente las ventajas del alginato en términos de proceso, costo y disponibilidad de literatura científica.</div>
+      <div class="branch-row cols-3">
+        <div class="branch-card b5">
+          <div class="bc-tag">Quitosano</div>
+          <div class="bc-title">Polisacárido catiónico · Origen crustáceos</div>
+          <div class="bc-text">Gelifica en medio alcalino. Actividad antimicrobiana intrínseca, diferenciador funcional para aplicaciones textiles. Proceso de disolución más agresivo. Segunda opción más viable en términos de accesibilidad.</div>
+        </div>
+        <div class="branch-card b5">
+          <div class="bc-tag">Carragenina</div>
+          <div class="bc-title">Polisacárido · Origen marino</div>
+          <div class="bc-text">Gelifica con K⁺ y Ca²⁺ mediante mecanismo análogo. Mayor fragilidad que el alginato. Sensibilidad marcada a la temperatura durante la gelificación. Aplicaciones textiles limitadas en la literatura.</div>
+        </div>
+        <div class="branch-card b5">
+          <div class="bc-tag">Seda — fibroína</div>
+          <div class="bc-title">Proteína fibrosa · Alta resistencia</div>
+          <div class="bc-text">Resistencia a la tracción de hasta 500 MPa, superior a las fibras de alginato. Biodegradable y biocompatible. Costo elevado y proceso de extracción y disolución considerablemente más complejo.</div>
+        </div>
+      </div>
+      <div class="note">La selección del alginato para el presente proyecto responde a criterios objetivos: <strong>proceso acuoso sin solventes tóxicos · costo y disponibilidad en el contexto local · amplia base bibliográfica de referencia · variables de síntesis controlables con equipamiento de laboratorio básico</strong>. La elección es argumentada con base en la literatura disponible.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="v-line"></div>
+<div style="max-width:860px;width:100%;padding:18px 0;border-top:2px solid var(--ink);margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-muted);letter-spacing:0.15em;text-transform:uppercase;">6 referencias · 5 bloques · 14 subtemas · Proyecto de investigación 2025</span>
+  <span style="font-family:'Libre Baskerville',serif;font-size:12px;color:var(--ink-soft);font-style:italic;">María José Escobar León · Ingeniería de Materiales · UdeA</span>
+</div>
+
+</div>
+</body>
+</html>
