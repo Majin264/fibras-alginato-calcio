@@ -10,7 +10,8 @@ de fibras obtenidas por extrusión húmeda?
 **Estado:** Fase teórica / revisión bibliográfica
 
 ## Contenido
-- [Diagrama de flujo teórico](docs/diagrama_flujo.html)
+- [Diagrama de flujo teórico]([docs/diagrama_flujo.html](https://majin264.github.io/fibras-alginato-calcio/docs/diagrama_flujo.html))
+- Resumen de nuevas referencias 
 - Protocolo de síntesis *(próximamente)*
 - Datos experimentales *(próximamente)*
 - Análisis en Python *(próximamente)*
